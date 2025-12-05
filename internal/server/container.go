@@ -26,7 +26,7 @@ func Start() {
 	).Run()
 }
 
-func startServer(lc fx.Lifecycle, r *chi.Mux, logger *zap.Logger, props *config.AppProps) {
+func startServer(lc fx.Lifecycle, r *chi.Mux, logger *zap.Logger, props *config.Properties) {
 	srv := &http.Server{
 		Addr:    ":8080",
 		Handler: r,
@@ -34,7 +34,7 @@ func startServer(lc fx.Lifecycle, r *chi.Mux, logger *zap.Logger, props *config.
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			logger.Info(fmt.Sprintf("Process ID: %d on %s", os.Getpid(), props.Host))
+			logger.Info(fmt.Sprintf("Process ID: %d on %s", os.Getpid(), props.Env.Host))
 			go func() {
 				if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 					logger.Error("HTTP server failed to start", zap.Error(err))

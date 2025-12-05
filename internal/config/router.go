@@ -1,8 +1,7 @@
 package config
 
 import (
-	"net/http"
-
+	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 )
@@ -20,7 +19,5 @@ func registerMiddlewares(r *chi.Mux) {
 }
 
 func registerRoutes(r *chi.Mux) {
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		w.Write([]byte("Hello, world!\n"))
-	})
+	r.Get("/", resource.GetResource)
 }
