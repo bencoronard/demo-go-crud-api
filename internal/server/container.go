@@ -19,6 +19,8 @@ func Start() {
 			config.ReadProperties,
 			config.NewLogger,
 			config.NewDB,
+			config.NewJwtVerifier,
+			config.NewAuthHeaderResolver,
 			resource.NewResourceRepoImpl,
 			resource.NewResourceServiceImpl,
 			resource.NewResourceHandler,
