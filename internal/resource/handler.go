@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/bencoronard/demo-go-common-libs/dto"
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
 	"github.com/labstack/echo/v4"
 )
@@ -23,7 +24,7 @@ func (h *ResourceHandler) ListResources(c echo.Context) error {
 		return err
 	}
 
-	res, err := h.s.listResources(c.Request().Context(), nil, claims)
+	res, err := h.s.listResources(c.Request().Context(), dto.Pageable{}, claims)
 	if err != nil {
 		return err
 	}

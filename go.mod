@@ -5,7 +5,7 @@ go 1.25
 replace github.com/bencoronard/demo-go-common-libs => ../demo-go-common-libs
 
 require (
-	github.com/bencoronard/demo-go-common-libs v0.0.0-20251224061638-94c61e3f7cc4
+	github.com/bencoronard/demo-go-common-libs v0.0.0-20251226151522-4afb856ceb8a
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/labstack/echo/v4 v4.14.0
 	github.com/spf13/viper v1.21.0

@@ -3,10 +3,12 @@ package resource
 import (
 	"context"
 	"database/sql"
+
+	"github.com/bencoronard/demo-go-common-libs/dto"
 )
 
 type resourceRepo interface {
-	findAll(ctx context.Context, p any, createdBy int64) (any, error)
+	findAll(ctx context.Context, page dto.Pageable, createdBy int64) (dto.Slice[resource], error)
 	findById(ctx context.Context, id int64, createdBy int64) (*resource, error)
 	save(ctx context.Context, ent *resource) (*resource, error)
 	delete(ctx context.Context, ent *resource) error
@@ -20,22 +22,22 @@ func NewResourceRepoImpl(db *sql.DB) resourceRepo {
 	return &resourceRepoImpl{db: db}
 }
 
-// delete implements resourceRepo.
+// delete implements [resourceRepo].
 func (r *resourceRepoImpl) delete(ctx context.Context, ent *resource) error {
 	panic("unimplemented")
 }
 
-// findAll implements resourceRepo.
-func (r *resourceRepoImpl) findAll(ctx context.Context, p any, createdBy int64) (any, error) {
+// findAll implements [resourceRepo].
+func (r *resourceRepoImpl) findAll(ctx context.Context, page dto.Pageable, createdBy int64) (dto.Slice[resource], error) {
 	panic("unimplemented")
 }
 
-// findById implements resourceRepo.
+// findById implements [resourceRepo].
 func (r *resourceRepoImpl) findById(ctx context.Context, id int64, createdBy int64) (*resource, error) {
 	panic("unimplemented")
 }
 
-// save implements resourceRepo.
+// save implements [resourceRepo].
 func (r *resourceRepoImpl) save(ctx context.Context, ent *resource) (*resource, error) {
 	panic("unimplemented")
 }

@@ -4,11 +4,12 @@ import (
 	"context"
 	"strconv"
 
+	"github.com/bencoronard/demo-go-common-libs/dto"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 type resourceService interface {
-	listResources(ctx context.Context, p any, claims jwt.MapClaims) (any, error)
+	listResources(ctx context.Context, page dto.Pageable, claims jwt.MapClaims) (dto.Slice[resource], error)
 	retrieveResource(ctx context.Context, id int64, claims jwt.MapClaims) (*resource, error)
 	createResource(ctx context.Context, dto *resource, claims jwt.MapClaims) (int64, error)
 	updateResource(ctx context.Context, dto *resource, claims jwt.MapClaims) error
@@ -23,43 +24,42 @@ func NewResourceServiceImpl(r resourceRepo) resourceService {
 	return &resourceServiceImpl{r: r}
 }
 
-// listResources implements resourceService.
-func (s *resourceServiceImpl) listResources(ctx context.Context, p any, claims jwt.MapClaims) (any, error) {
+func (s *resourceServiceImpl) listResources(ctx context.Context, page dto.Pageable, claims jwt.MapClaims) (dto.Slice[resource], error) {
 
 	sub, err := claims.GetSubject()
 	if err != nil {
-		return nil, err
+		return dto.Slice[resource]{}, err
 	}
 
 	createdBy, err := strconv.ParseInt(sub, 10, 64)
 	if err != nil {
-		return nil, err
+		return dto.Slice[resource]{}, err
 	}
 
-	ents, err := s.r.findAll(ctx, p, createdBy)
+	ents, err := s.r.findAll(ctx, page, createdBy)
 	if err != nil {
-		return nil, err
+		return dto.Slice[resource]{}, err
 	}
 
 	return ents, nil
 }
 
-// createResource implements resourceService.
+// createResource implements [resourceService].
 func (s *resourceServiceImpl) createResource(ctx context.Context, dto *resource, claims jwt.MapClaims) (int64, error) {
 	panic("unimplemented")
 }
 
-// deleteResource implements resourceService.
+// deleteResource implements [resourceService].
 func (s *resourceServiceImpl) deleteResource(ctx context.Context, id int64, claims jwt.MapClaims) error {
 	panic("unimplemented")
 }
 
-// retrieveResource implements resourceService.
+// retrieveResource implements [resourceService].
 func (s *resourceServiceImpl) retrieveResource(ctx context.Context, id int64, claims jwt.MapClaims) (*resource, error) {
 	panic("unimplemented")
 }
 
-// updateResource implements resourceService.
+// updateResource implements [resourceService].
 func (s *resourceServiceImpl) updateResource(ctx context.Context, dto *resource, claims jwt.MapClaims) error {
 	panic("unimplemented")
 }
