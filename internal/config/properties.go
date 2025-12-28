@@ -17,10 +17,12 @@ type EnvCfg struct {
 	App   AppCfg
 	Vault VaultCfg
 	OTEL  OTELCfg
-	DB    DBCfg
+	CP    CPCfg
 }
 
-type SecretCfg struct{}
+type SecretCfg struct {
+	DB DBCfg
+}
 
 func NewProperties(lc fx.Lifecycle) (*Properties, error) {
 	var props Properties
@@ -64,10 +66,18 @@ type OTELCfg struct {
 	TracesSamplingProbability float64 `env:"OTEL_TRACES_SAMPLING_PROBABILITY"`
 }
 
-type DBCfg struct {
+type CPCfg struct {
 	ConnectionPoolCap         int `env:"CRUD_API_DB_CP_CAP"`
 	ConnectionPoolIdleMin     int `env:"CRUD_API_DB_CP_IDLE_MIN"`
 	ConnectionPoolIdleTimeout int `env:"CRUD_API_DB_CP_IDLE_TIMEOUT"`
 	ConnectionTimeout         int `env:"CRUD_API_DB_CP_CONN_TIMEOUT"`
 	ConnectionTTL             int `env:"CRUD_API_DB_CP_CONN_TTL"`
+}
+
+type DBCfg struct {
+	Host string
+	Port int
+	DB   string
+	User string
+	Pass string
 }
