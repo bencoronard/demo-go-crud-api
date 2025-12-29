@@ -20,7 +20,7 @@ func Start() {
 			config.NewRouter,
 		),
 		fx.Invoke(
-			config.Router.Start,
+			config.Container.Start,
 		),
 	).Run()
 }

@@ -1,14 +1,16 @@
 package config
 
-import "go.uber.org/zap"
+import (
+	"log/slog"
+	"os"
+)
 
-func NewLogger() (*zap.Logger, error) {
-	cfg := zap.NewProductionConfig()
+func NewLogger() (*slog.Logger, error) {
+	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{})
 
-	logger, err := cfg.Build()
-	if err != nil {
-		return nil, err
-	}
+	logger := slog.New(handler)
+
+	slog.SetDefault(logger)
 
 	return logger, nil
 }

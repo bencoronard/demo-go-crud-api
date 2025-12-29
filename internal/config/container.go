@@ -3,6 +3,7 @@ package config
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -10,44 +11,45 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
-type Router interface {
-	Start(lc fx.Lifecycle, props *Properties)
+type Container interface {
+	Start(lc fx.Lifecycle)
 }
 
-type routerImpl struct {
-	r   *echo.Echo
-	h   *resource.ResourceHandler
-	log *zap.Logger
+type containerImpl struct {
+	p *Properties
+	r *echo.Echo
+	h *resource.ResourceHandler
+	l *slog.Logger
 }
 
-func NewRouter(h *resource.ResourceHandler, l *zap.Logger) Router {
+func NewRouter(h *resource.ResourceHandler, l *slog.Logger, p *Properties) Container {
 	r := echo.New()
 	registerMiddlewares(r)
 	registerRoutes(r, h)
-	return &routerImpl{
-		r:   r,
-		h:   h,
-		log: l,
+	return &containerImpl{
+		p: p,
+		r: r,
+		h: h,
+		l: l,
 	}
 }
 
-func (r *routerImpl) Start(lc fx.Lifecycle, props *Properties) {
+func (c *containerImpl) Start(lc fx.Lifecycle) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			r.log.Info(fmt.Sprintf("Process ID: %d on %s", os.Getpid(), props.Env.App.Environment))
+			c.l.Info(fmt.Sprintf("Process ID: %d on %s", os.Getpid(), c.p.Env.App.Environment))
 			go func() {
-				if err := r.r.Start(fmt.Sprintf(":%d", props.Env.App.ListenPort)); err != nil && err != http.ErrServerClosed {
-					r.log.Error("HTTP server failed to start", zap.Error(err))
+				if err := c.r.Start(fmt.Sprintf(":%d", c.p.Env.App.ListenPort)); err != nil && err != http.ErrServerClosed {
+					c.l.Error("HTTP server failed to start")
 				}
 			}()
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
-			r.log.Info("Shutting down HTTP server...")
-			return r.r.Shutdown(ctx)
+			c.l.Info("Shutting down HTTP server...")
+			return c.r.Shutdown(ctx)
 		},
 	})
 }
