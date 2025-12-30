@@ -10,13 +10,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func NewDB(lc fx.Lifecycle, props *Properties) (*gorm.DB, error) {
+func NewDB(lc fx.Lifecycle, p *Properties) (*gorm.DB, error) {
 	dsn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable TimeZone=Asia/Bangkok",
-		props.Secret.DB.Host,
-		props.Secret.DB.Port,
-		props.Secret.DB.User,
-		props.Secret.DB.Pass,
-		props.Secret.DB.Name,
+		p.Secret.DB.Host,
+		p.Secret.DB.Port,
+		p.Secret.DB.User,
+		p.Secret.DB.Pass,
+		p.Secret.DB.Name,
 	)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -29,10 +29,10 @@ func NewDB(lc fx.Lifecycle, props *Properties) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	sqlDB.SetMaxOpenConns(props.Env.CP.ConnectionPoolCap)
-	sqlDB.SetMaxIdleConns(props.Env.CP.ConnectionPoolIdleMin)
-	sqlDB.SetConnMaxLifetime(time.Duration(props.Env.CP.ConnectionTTL) * time.Millisecond)
-	sqlDB.SetConnMaxIdleTime(time.Duration(props.Env.CP.ConnectionPoolIdleTimeout) * time.Millisecond)
+	sqlDB.SetMaxOpenConns(p.Env.CP.ConnectionPoolCap)
+	sqlDB.SetMaxIdleConns(p.Env.CP.ConnectionPoolIdleMin)
+	sqlDB.SetConnMaxLifetime(time.Duration(p.Env.CP.ConnectionTTL) * time.Millisecond)
+	sqlDB.SetConnMaxIdleTime(time.Duration(p.Env.CP.ConnectionPoolIdleTimeout) * time.Millisecond)
 
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
