@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/bencoronard/demo-go-crud-api/internal/config"
@@ -40,7 +39,6 @@ func Start() {
 func start(lc fx.Lifecycle, sd fx.Shutdowner, e *echo.Echo, p *config.Properties) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			slog.Info(fmt.Sprintf("Process ID: %d on %s", os.Getpid(), p.Env.App.Environment))
 
 			errChan := make(chan error, 1)
 
@@ -64,10 +62,6 @@ func start(lc fx.Lifecycle, sd fx.Shutdowner, e *echo.Echo, p *config.Properties
 				}()
 				return nil
 			}
-		},
-		OnStop: func(ctx context.Context) error {
-			slog.Info("Shutting down HTTP server...")
-			return e.Shutdown(ctx)
 		},
 	})
 }
