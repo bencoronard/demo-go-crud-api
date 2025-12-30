@@ -1,8 +1,6 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/caarlos0/env/v11"
 	"go.uber.org/fx"
 )
@@ -27,58 +25,15 @@ func NewProperties(lc fx.Lifecycle) (*Properties, error) {
 	var props Properties
 
 	if err := env.Parse(&props.Env); err != nil {
-		return nil, fmt.Errorf("failed to parse env config: %w", err)
+		return nil, err
 	}
 
-	// lc.Append(fx.Hook{
-	// 	OnStart: func(ctx context.Context) error {
-	// 		if err := fetchVaultSecrets(ctx, &props.Secret, props.Env.Vault); err != nil {
-	// 			return fmt.Errorf("failed to fetch vault secrets: %w", err)
-	// 		}
-	// 		return nil
-	// 	},
-	// })
-
 	if err := env.Parse(&props.Secret); err != nil {
-		return nil, fmt.Errorf("failed to parse secret config: %w", err)
+		return nil, err
 	}
 
 	return &props, nil
 }
-
-// func fetchVaultSecrets(ctx context.Context, s *SecretCfg, cfg VaultCfg) error {
-// 	client, err := vault.New(
-// 		vault.WithAddress(cfg.URI),
-// 		vault.WithRequestTimeout(30*time.Second),
-// 	)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	if err := client.SetToken(cfg.Token); err != nil {
-// 		return err
-// 	}
-
-// 	sec, err := client.Secrets.KvV1Read(ctx, "secret")
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	host, ok := sec.Data["pg.host"].(string)
-// 	if !ok {
-// 		return errors.New("unable to retrieve PG host")
-// 	}
-
-// 	port, ok := sec.Data["pg.port"].(int)
-// 	if !ok {
-// 		return errors.New("unable to retrieve PG port")
-// 	}
-
-// 	s.DB.Host = host
-// 	s.DB.Port = port
-
-// 	return nil
-// }
 
 type AppCfg struct {
 	ListenPort    int    `env:"APP_LISTEN_PORT"`
