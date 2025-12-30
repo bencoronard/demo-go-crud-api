@@ -10,7 +10,6 @@ func Start() {
 	fx.New(
 		fx.Provide(
 			config.NewProperties,
-			config.NewLogger,
 			config.NewDB,
 			config.NewJwtVerifier,
 			config.NewAuthHeaderResolver,
@@ -18,12 +17,12 @@ func Start() {
 			resource.NewResourceService,
 			resource.NewResourceHandler,
 			config.NewRouter,
-			config.NewContainer,
 		),
 		fx.Invoke(
+			config.ConfigureLogger,
 			config.RegisterMiddlewares,
 			config.RegisterRoutes,
-			config.Container.Start,
+			config.Start,
 		),
 	).Run()
 }
