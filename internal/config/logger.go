@@ -5,12 +5,10 @@ import (
 	"os"
 )
 
-func NewLogger() (*slog.Logger, error) {
+func ConfigureLogger() {
 	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{})
 
 	logger := slog.New(handler)
 
 	slog.SetDefault(logger)
-
-	return logger, nil
 }
