@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bencoronard/demo-go-common-libs/http"
 	"github.com/bencoronard/demo-go-crud-api/internal/config"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	"go.uber.org/fx"
@@ -24,6 +25,6 @@ func main() {
 		fx.Invoke(
 			config.ConfigureLogger,
 		),
-		fx.Invoke(config.Start),
+		fx.Invoke(http.InitContainer),
 	).Run()
 }
