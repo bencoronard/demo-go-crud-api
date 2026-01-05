@@ -7,7 +7,6 @@ import (
 	"github.com/caarlos0/env/v11"
 	vault "github.com/hashicorp/vault/api"
 	"github.com/mitchellh/mapstructure"
-	"go.uber.org/fx"
 )
 
 type Properties struct {
@@ -26,7 +25,7 @@ type SecretCfg struct {
 	DB DBCfg
 }
 
-func NewProperties(lc fx.Lifecycle) (*Properties, error) {
+func NewProperties() (*Properties, error) {
 	var props Properties
 
 	if err := env.Parse(&props.Env); err != nil {
