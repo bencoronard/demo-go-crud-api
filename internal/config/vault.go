@@ -5,6 +5,6 @@ import (
 	"go.uber.org/fx"
 )
 
-func NewVaultClient(lc fx.Lifecycle, p *Properties) (vault.Client, error) {
-	return vault.NewTokenClient(lc, p.Env.Vault.URI, p.Env.Vault.Token)
+func NewVaultClient(lc fx.Lifecycle, e *envCfg) (vault.Client, error) {
+	return vault.NewTokenClient(lc, e.Vault.URI, e.Vault.Token)
 }

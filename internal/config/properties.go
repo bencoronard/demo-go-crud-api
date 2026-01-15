@@ -1,65 +1,55 @@
 package config
 
 import (
+	"context"
 	"fmt"
-	"log/slog"
+	"time"
 
+	"github.com/bencoronard/demo-go-common-libs/vault"
 	"github.com/caarlos0/env/v11"
-	vault "github.com/hashicorp/vault/api"
-	"github.com/mitchellh/mapstructure"
 )
 
 type Properties struct {
-	Env    EnvCfg
-	Secret SecretCfg
+	Env    envCfg
+	Secret secretCfg
 }
 
-type EnvCfg struct {
+type envCfg struct {
 	App   AppCfg
 	Vault VaultCfg
 	OTEL  OTELCfg
 	CP    CPCfg
 }
 
-type SecretCfg struct {
-	DB DBCfg
+type secretCfg struct {
+	DB DBCfg `mapstructure:",squash"`
 }
 
-func NewProperties() (*Properties, error) {
-	var props Properties
+func NewEnvCfg() (*envCfg, error) {
+	var e envCfg
+	if err := env.Parse(&e); err != nil {
+		return nil, err
+	}
+	return &e, nil
+}
 
-	if err := env.Parse(&props.Env); err != nil {
+func NewSecretCfg(vc vault.Client, e *envCfg) (*secretCfg, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	var s secretCfg
+	if err := vc.ReadSecret(ctx, fmt.Sprintf("secret/application/%s", e.App.Environment), &s); err != nil {
 		return nil, err
 	}
 
-	cfg := vault.DefaultConfig()
-	cfg.Address = props.Env.Vault.URI
+	return &s, nil
+}
 
-	client, err := vault.NewClient(cfg)
-	if err != nil {
-		return nil, err
-	}
-	client.SetToken(props.Env.Vault.Token)
-
-	secretPath := "secret/application/dev"
-	// secretPath := fmt.Sprintf("secret/application/%s", props.Env.App.Environment)
-	secret, err := client.Logical().Read(secretPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if secret == nil || secret.Data == nil {
-		return nil, fmt.Errorf("no secrets found at path: %s", secretPath)
-	}
-
-	err = mapstructure.Decode(secret.Data, &props.Secret.DB)
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode vault data: %w", err)
-	}
-
-	slog.Info(fmt.Sprintf("From Vault: %v", props.Secret))
-
-	return &props, nil
+func NewProperties(e *envCfg, s *secretCfg) (*Properties, error) {
+	return &Properties{
+		Env:    *e,
+		Secret: *s,
+	}, nil
 }
 
 type AppCfg struct {
