@@ -25,7 +25,6 @@ func NewResourceService(r resourceRepo) resourceService {
 }
 
 func (s *resourceServiceImpl) listResources(ctx context.Context, page dto.Pageable, claims jwt.MapClaims) (dto.Slice[resource], error) {
-
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return dto.Slice[resource]{}, err
@@ -36,7 +35,7 @@ func (s *resourceServiceImpl) listResources(ctx context.Context, page dto.Pageab
 		return dto.Slice[resource]{}, err
 	}
 
-	ents, err := s.r.findAll(ctx, page, uint(createdBy))
+	ents, err := s.r.findAllByCreatedBy(ctx, page, uint(createdBy))
 	if err != nil {
 		return dto.Slice[resource]{}, err
 	}
