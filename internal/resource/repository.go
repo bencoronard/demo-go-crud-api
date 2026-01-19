@@ -2,14 +2,16 @@ package resource
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
 	"github.com/bencoronard/demo-go-common-libs/dto"
 	"gorm.io/gorm"
 )
 
 type resourceRepo interface {
-	findAll(ctx context.Context, page dto.Pageable, createdBy uint) (dto.Slice[resource], error)
-	findById(ctx context.Context, id uint, createdBy uint) (*resource, error)
+	findAllByCreatedBy(ctx context.Context, page dto.Pageable, createdBy uint) (dto.Slice[resource], error)
+	findByIdAndCreatedBy(ctx context.Context, id uint, createdBy uint) (*resource, error)
 	save(ctx context.Context, ent *resource) (*resource, error)
 	delete(ctx context.Context, ent *resource) error
 }
@@ -22,16 +24,36 @@ func NewResourceRepo(db *gorm.DB) resourceRepo {
 	return &resourceRepoImpl{db: db}
 }
 
-func (r *resourceRepoImpl) findAll(ctx context.Context, page dto.Pageable, createdBy uint) (dto.Slice[resource], error) {
-	return dto.Slice[resource]{}, nil
+func (r *resourceRepoImpl) findAllByCreatedBy(ctx context.Context, page dto.Pageable, createdBy uint) (dto.Slice[resource], error) {
+	query := gorm.G[resource](r.db).Where("created_by = ?", createdBy).Limit(page.GetLimit() + 1).Offset(page.GetOffset())
+
+	for _, sort := range page.Sort {
+		orderClause := fmt.Sprintf("%s %s", sort.Property, sort.Direction)
+		query = query.Order(orderClause)
+	}
+
+	ents, err := query.Find(ctx)
+	if err != nil {
+		return dto.Slice[resource]{}, err
+	}
+
+	return *dto.NewSlice(ents, &page, len(ents)), nil
 }
 
-func (r *resourceRepoImpl) findById(ctx context.Context, id uint, createdBy uint) (*resource, error) {
-	return &resource{}, nil
+func (r *resourceRepoImpl) findByIdAndCreatedBy(ctx context.Context, id uint, createdBy uint) (*resource, error) {
+	ent, err := gorm.G[resource](r.db).Where("id = ?", id).Where("created_by = ?", createdBy).First(ctx)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &ent, nil
 }
 
 func (r *resourceRepoImpl) save(ctx context.Context, ent *resource) (*resource, error) {
-	return &resource{}, nil
+	return nil, nil
 }
 
 func (r *resourceRepoImpl) delete(ctx context.Context, ent *resource) error {
