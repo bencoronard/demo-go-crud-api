@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"net/http"
 
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
@@ -48,9 +49,14 @@ func (r *router) RegisterMiddlewares() {
 }
 
 func (r *router) RegisterRoutes() {
-	r.e.GET("/", r.h.ListResources)
-	r.e.GET("/", r.h.RetrieveResource)
-	r.e.POST("/", r.h.CreateResource)
-	r.e.PUT("/", r.h.UpdateResource)
-	r.e.DELETE("/", r.h.DeleteResource)
+	api := r.e.Group("/api")
+	api.GET("/resources", r.h.ListResources)
+	api.GET("/resources/:id", r.h.RetrieveResource)
+	api.POST("/resources", r.h.CreateResource)
+	api.PUT("/resources/:id", r.h.UpdateResource)
+	api.DELETE("/resources/:id", r.h.DeleteResource)
+
+	act := r.e.Group("/actuator")
+	act.GET("/health", func(c echo.Context) error { return c.JSON(http.StatusOK, map[string]string{"status": "up"}) })
+	act.GET("/readiness", func(c echo.Context) error { return c.JSON(http.StatusOK, map[string]string{"status": "ready"}) })
 }
