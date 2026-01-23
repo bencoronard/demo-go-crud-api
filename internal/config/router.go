@@ -44,12 +44,11 @@ func (r *router) Shutdown(ctx context.Context) error {
 }
 
 func (r *router) RegisterMiddlewares() {
-	r.e.Use(middleware.RequestLogger())
 	r.e.Use(middleware.Recover())
 }
 
 func (r *router) RegisterRoutes() {
-	api := r.e.Group("/api")
+	api := r.e.Group("/api", middleware.RequestLogger())
 	api.GET("/resources/:id", r.h.RetrieveResource)
 	api.GET("/resources", r.h.ListResources)
 	api.POST("/resources", r.h.CreateResource)
