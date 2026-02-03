@@ -5,9 +5,9 @@ go 1.26
 replace github.com/bencoronard/demo-go-common-libs => ../demo-go-common-libs
 
 require (
-	github.com/bencoronard/demo-go-common-libs v0.0.0-20260123143759-327ce09862cd
+	github.com/bencoronard/demo-go-common-libs v0.0.0-20260203141452-097dbbf8d427
 	github.com/caarlos0/env/v11 v11.3.1
-	github.com/golang-jwt/jwt/v5 v5.3.0
+	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/labstack/echo/v4 v4.15.0
 	go.uber.org/fx v1.24.0
 	gorm.io/driver/postgres v1.6.0
