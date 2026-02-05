@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/bencoronard/demo-go-common-libs/constant"
 	"github.com/bencoronard/demo-go-common-libs/dto"
 	"github.com/bencoronard/demo-go-common-libs/orm"
 	"github.com/golang-jwt/jwt/v5"
@@ -33,6 +34,11 @@ func NewResourceService(t orm.TransactionManager, r resourceRepo) resourceServic
 }
 
 func (s *resourceServiceImpl) listResources(ctx context.Context, page dto.Pageable, claims jwt.MapClaims) (dto.Slice[resource], error) {
+	val, ok := claims["list_resources"]
+	if !ok || val == nil {
+		return dto.Slice[resource]{}, fmt.Errorf("%w: not allowed to list resources", constant.ErrInsufficientPermission)
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return dto.Slice[resource]{}, err
@@ -60,6 +66,11 @@ func (s *resourceServiceImpl) listResources(ctx context.Context, page dto.Pageab
 }
 
 func (s *resourceServiceImpl) retrieveResource(ctx context.Context, id uint, claims jwt.MapClaims) (resource, error) {
+	val, ok := claims["read_resource"]
+	if !ok || val == nil {
+		return resource{}, fmt.Errorf("%w: not allowed to read resource", constant.ErrInsufficientPermission)
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return resource{}, err
@@ -90,6 +101,11 @@ func (s *resourceServiceImpl) retrieveResource(ctx context.Context, id uint, cla
 }
 
 func (s *resourceServiceImpl) createResource(ctx context.Context, dto resource, claims jwt.MapClaims) (uint, error) {
+	val, ok := claims["create_resource"]
+	if !ok || val == nil {
+		return 0, fmt.Errorf("%w: not allowed to create resource", constant.ErrInsufficientPermission)
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return 0, err
@@ -120,6 +136,11 @@ func (s *resourceServiceImpl) createResource(ctx context.Context, dto resource, 
 }
 
 func (s *resourceServiceImpl) updateResource(ctx context.Context, id uint, dto resource, claims jwt.MapClaims) error {
+	val, ok := claims["update_resource"]
+	if !ok || val == nil {
+		return fmt.Errorf("%w: not allowed to update resource", constant.ErrInsufficientPermission)
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return err
@@ -157,6 +178,11 @@ func (s *resourceServiceImpl) updateResource(ctx context.Context, id uint, dto r
 }
 
 func (s *resourceServiceImpl) deleteResource(ctx context.Context, id uint, claims jwt.MapClaims) error {
+	val, ok := claims["delete_resource"]
+	if !ok || val == nil {
+		return fmt.Errorf("%w: not allowed to delete resource", constant.ErrInsufficientPermission)
+	}
+
 	sub, err := claims.GetSubject()
 	if err != nil {
 		return err
