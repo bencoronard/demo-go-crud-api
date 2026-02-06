@@ -1,6 +1,6 @@
 module github.com/bencoronard/demo-go-crud-api
 
-go 1.26
+go 1.25
 
 replace github.com/bencoronard/demo-go-common-libs => ../demo-go-common-libs
 
