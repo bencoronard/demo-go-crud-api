@@ -160,6 +160,7 @@ func (s *resourceServiceImpl) updateResource(ctx context.Context, id uint, dto r
 			return err
 		}
 
+		resource.Version = dto.Version
 		resource.TextField = dto.TextField
 		resource.NumberField = dto.NumberField
 		resource.BooleanField = dto.BooleanField
