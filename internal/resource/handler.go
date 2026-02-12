@@ -8,7 +8,7 @@ import (
 
 	"github.com/bencoronard/demo-go-common-libs/dto"
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 type ResourceHandler struct {
@@ -20,7 +20,7 @@ func NewResourceHandler(r xhttp.AuthHeaderResolver, s resourceService) *Resource
 	return &ResourceHandler{r: r, s: s}
 }
 
-func (h *ResourceHandler) RetrieveResource(c echo.Context) error {
+func (h *ResourceHandler) RetrieveResource(c *echo.Context) error {
 	claims, err := h.r.ExtractClaims(c.Request())
 	if err != nil {
 		return err
@@ -39,7 +39,7 @@ func (h *ResourceHandler) RetrieveResource(c echo.Context) error {
 	return c.JSON(http.StatusOK, toDTO(ent))
 }
 
-func (h *ResourceHandler) ListResources(c echo.Context) error {
+func (h *ResourceHandler) ListResources(c *echo.Context) error {
 	claims, err := h.r.ExtractClaims(c.Request())
 	if err != nil {
 		return err
@@ -74,7 +74,7 @@ func (h *ResourceHandler) ListResources(c echo.Context) error {
 	return c.JSON(http.StatusOK, dto.Map(slice, toDTO))
 }
 
-func (h *ResourceHandler) CreateResource(c echo.Context) error {
+func (h *ResourceHandler) CreateResource(c *echo.Context) error {
 	claims, err := h.r.ExtractClaims(c.Request())
 	if err != nil {
 		return err
@@ -94,7 +94,7 @@ func (h *ResourceHandler) CreateResource(c echo.Context) error {
 	return c.NoContent(http.StatusCreated)
 }
 
-func (h *ResourceHandler) UpdateResource(c echo.Context) error {
+func (h *ResourceHandler) UpdateResource(c *echo.Context) error {
 	claims, err := h.r.ExtractClaims(c.Request())
 	if err != nil {
 		return err
@@ -117,7 +117,7 @@ func (h *ResourceHandler) UpdateResource(c echo.Context) error {
 	return c.NoContent(http.StatusNoContent)
 }
 
-func (h *ResourceHandler) DeleteResource(c echo.Context) error {
+func (h *ResourceHandler) DeleteResource(c *echo.Context) error {
 	claims, err := h.r.ExtractClaims(c.Request())
 	if err != nil {
 		return err
