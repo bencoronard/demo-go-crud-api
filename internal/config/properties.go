@@ -18,7 +18,7 @@ type Properties struct {
 type envCfg struct {
 	App   appCfg
 	Vault vaultCfg
-	OTEL  otelCfg
+	Otel  otelCfg
 	CP    cpCfg
 }
 
@@ -52,6 +52,7 @@ func NewProperties(lc fx.Lifecycle) (*Properties, error) {
 }
 
 type appCfg struct {
+	Name          string `env:"APP_NAME"`
 	ListenPort    int    `env:"APP_LISTEN_PORT"`
 	Environment   string `env:"APP_ENVIRONMENT"`
 	PublicKeyPath string `env:"APP_PUBLIC_KEY_PATH"`
@@ -63,11 +64,12 @@ type vaultCfg struct {
 }
 
 type otelCfg struct {
-	MetricsEndpoint           string  `env:"OTEL_COL_METRICS_ENDPOINT"`
 	TracesEndpoint            string  `env:"OTEL_COL_TRACES_ENDPOINT"`
+	MetricsEndpoint           string  `env:"OTEL_COL_METRICS_ENDPOINT"`
 	LogsEndpoint              string  `env:"OTEL_COL_LOGS_ENDPOINT"`
-	MetricsSamplingFreqInMin  string  `env:"OTEL_METRICS_SAMPLING_FREQ_IN_MIN"`
 	TracesSamplingProbability float64 `env:"OTEL_TRACES_SAMPLING_PROBABILITY"`
+	TracesBatchTimeoutInSec   int     `env:"OTEL_TRACES_BATCH_TIMEOUT_IN_SEC"`
+	MetricsSamplingFreqInSec  int     `env:"OTEL_METRICS_SAMPLING_FREQ_IN_SEC"`
 }
 
 type cpCfg struct {
