@@ -25,6 +25,7 @@ func main() {
 			resource.NewResourceHandler,
 		),
 		fx.Provide(
+			config.NewResource,
 			config.NewTracerProvider,
 			config.NewMeterProvider,
 		),
