@@ -18,7 +18,6 @@ type Properties struct {
 type envCfg struct {
 	App   appCfg
 	Vault vaultCfg
-	Otel  otelCfg
 	CP    cpCfg
 }
 
@@ -61,15 +60,6 @@ type appCfg struct {
 type vaultCfg struct {
 	URI   string `env:"VAULT_URI"`
 	Token string `env:"VAULT_TOKEN"`
-}
-
-type otelCfg struct {
-	TracesEndpoint            string  `env:"OTEL_COL_TRACES_ENDPOINT"`
-	MetricsEndpoint           string  `env:"OTEL_COL_METRICS_ENDPOINT"`
-	LogsEndpoint              string  `env:"OTEL_COL_LOGS_ENDPOINT"`
-	TracesSamplingProbability float64 `env:"OTEL_TRACES_SAMPLING_PROBABILITY"`
-	TracesBatchTimeoutInSec   int     `env:"OTEL_TRACES_BATCH_TIMEOUT_IN_SEC"`
-	MetricsSamplingFreqInSec  int     `env:"OTEL_METRICS_SAMPLING_FREQ_IN_SEC"`
 }
 
 type cpCfg struct {

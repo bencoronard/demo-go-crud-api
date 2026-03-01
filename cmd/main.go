@@ -28,6 +28,7 @@ func main() {
 			config.NewResource,
 			config.NewTracerProvider,
 			config.NewMeterProvider,
+			config.NewLoggerProvider,
 		),
 		fx.Invoke(
 			config.ConfigureLogger,
