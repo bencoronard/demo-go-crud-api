@@ -14,8 +14,8 @@ import (
 func NewResource(p *Properties) (*resource.Resource, error) {
 	return resource.NewWithAttributes(
 		semconv.SchemaURL,
-		semconv.ServiceNameKey.String(p.Env.App.Name),
-		semconv.DeploymentEnvironmentNameKey.String(p.Env.App.Environment),
+		semconv.ServiceName(p.Env.App.Name),
+		semconv.DeploymentEnvironmentName(p.Env.App.Environment),
 	), nil
 }
 
