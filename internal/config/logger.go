@@ -2,11 +2,16 @@ package config
 
 import (
 	"log/slog"
-	"os"
+
+	"go.opentelemetry.io/contrib/bridges/otelslog"
+	"go.opentelemetry.io/otel/sdk/log"
 )
 
-func ConfigureLogger() {
-	handler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{})
+func ConfigureLogger(p *Properties, lp *log.LoggerProvider) {
+	handler := otelslog.NewHandler(
+		"",
+		otelslog.WithLoggerProvider(lp),
+	)
 
 	logger := slog.New(handler)
 
