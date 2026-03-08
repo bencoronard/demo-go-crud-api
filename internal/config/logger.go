@@ -9,7 +9,7 @@ import (
 
 func ConfigureLogger(p *Properties, lp *log.LoggerProvider) {
 	handler := otelslog.NewHandler(
-		"",
+		p.Env.App.Name,
 		otelslog.WithLoggerProvider(lp),
 	)
 

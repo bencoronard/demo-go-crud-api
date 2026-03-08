@@ -8,15 +8,10 @@ import (
 	"go.opentelemetry.io/otel/sdk/metric"
 	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
-	semconv "go.opentelemetry.io/otel/semconv/v1.39.0"
 )
 
 func NewResource(p *Properties) (*resource.Resource, error) {
-	return resource.NewWithAttributes(
-		semconv.SchemaURL,
-		semconv.ServiceName(p.Env.App.Name),
-		semconv.DeploymentEnvironmentName(p.Env.App.Environment),
-	), nil
+	return resource.Environment(), nil
 }
 
 func NewTracerProvider(res *resource.Resource) (*trace.TracerProvider, error) {

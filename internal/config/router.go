@@ -4,33 +4,38 @@ import (
 	"net/http"
 
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
+	"github.com/bencoronard/demo-go-common-libs/otel"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type router struct {
-	port int
-	e    *echo.Echo
-	h    *resource.ResourceHandler
+	p *Properties
+	e *echo.Echo
+	h *resource.ResourceHandler
 }
 
 func NewRouter(h *resource.ResourceHandler, p *Properties) xhttp.Router {
 	e := echo.New()
 	e.HTTPErrorHandler = xhttp.GlobalErrorHandler(nil)
 	return &router{
-		port: p.Env.App.ListenPort,
-		e:    e,
-		h:    h,
+		p: p,
+		e: e,
+		h: h,
 	}
 }
 
 func (r *router) Port() int {
-	return r.port
+	return r.p.Env.App.ListenPort
 }
 
 func (r *router) Handler() http.Handler {
-	return r.e
+	mux := http.NewServeMux()
+	mux.Handle("/actuator/", r.e)
+	mux.Handle("/", otelhttp.NewHandler(r.e, "/"))
+	return mux
 }
 
 func (r *router) RegisterMiddlewares() {
@@ -38,7 +43,11 @@ func (r *router) RegisterMiddlewares() {
 }
 
 func (r *router) RegisterRoutes() {
-	api := r.e.Group("/api/resources", middleware.RequestLogger())
+	api := r.e.Group("/api/resources",
+		middleware.RequestLogger(),
+		otel.RouteTagMiddleware,
+	)
+
 	api.GET("/:id", r.h.RetrieveResource)
 	api.GET("", r.h.ListResources)
 	api.POST("", r.h.CreateResource)
