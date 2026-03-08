@@ -46,6 +46,14 @@ func (r *router) RegisterRoutes() {
 	api.DELETE("/:id", r.h.DeleteResource)
 
 	act := r.e.Group("/actuator")
-	act.GET("/health", func(c *echo.Context) error { return c.JSON(http.StatusOK, map[string]string{"status": "up"}) })
-	act.GET("/readiness", func(c *echo.Context) error { return c.JSON(http.StatusOK, map[string]string{"status": "ready"}) })
+	act.GET("/health", healthCheck)
+	act.GET("/readiness", readinessCheck)
+}
+
+func healthCheck(c *echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"status": "up"})
+}
+
+func readinessCheck(c *echo.Context) error {
+	return c.JSON(http.StatusOK, map[string]string{"status": "ready"})
 }
