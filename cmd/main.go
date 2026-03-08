@@ -26,9 +26,9 @@ func main() {
 		),
 		fx.Provide(
 			config.NewResource,
-			config.NewTracerProvider,
-			config.NewMeterProvider,
-			config.NewLoggerProvider,
+			otel.NewTracerProvider,
+			otel.NewMeterProvider,
+			otel.NewLoggerProvider,
 		),
 		fx.Invoke(
 			config.ConfigureLogger,
