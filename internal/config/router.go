@@ -7,7 +7,6 @@ import (
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
-	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 )
 
 type router struct {
@@ -31,10 +30,7 @@ func (r *router) Port() int {
 }
 
 func (r *router) Handler() http.Handler {
-	mux := http.NewServeMux()
-	mux.Handle("/actuator/", r.e)
-	mux.Handle("/", otelhttp.NewHandler(r.e, "/"))
-	return mux
+	return r.e
 }
 
 func (r *router) RegisterMiddlewares() {
