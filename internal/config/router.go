@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
-	"github.com/bencoronard/demo-go-common-libs/otel"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
@@ -43,10 +42,7 @@ func (r *router) RegisterMiddlewares() {
 }
 
 func (r *router) RegisterRoutes() {
-	api := r.e.Group("/api/resources",
-		middleware.RequestLogger(),
-		otel.RouteTagMiddleware,
-	)
+	api := r.e.Group("/api/resources", middleware.RequestLogger())
 
 	api.GET("/:id", r.h.RetrieveResource)
 	api.GET("", r.h.ListResources)
