@@ -84,6 +84,9 @@ func (h *ResourceHandler) CreateResource(c *echo.Context) error {
 	if err := c.Bind(&body); err != nil {
 		return err
 	}
+	if err := c.Validate(body); err != nil {
+		return err
+	}
 
 	id, err := h.s.createResource(c.Request().Context(), toEntity(body), claims)
 	if err != nil {
@@ -107,6 +110,9 @@ func (h *ResourceHandler) UpdateResource(c *echo.Context) error {
 
 	var body resourceDTO
 	if err := c.Bind(&body); err != nil {
+		return err
+	}
+	if err := c.Validate(body); err != nil {
 		return err
 	}
 

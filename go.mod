@@ -5,7 +5,7 @@ go 1.26
 replace github.com/bencoronard/demo-go-common-libs => ../demo-go-common-libs
 
 require (
-	github.com/bencoronard/demo-go-common-libs v0.0.0-20260309151120-6cf087bea329
+	github.com/bencoronard/demo-go-common-libs v0.0.0-20260310155540-469cfc97c93c
 	github.com/caarlos0/env/v11 v11.4.0
 	github.com/golang-jwt/jwt/v5 v5.3.1
 	github.com/labstack/echo/v5 v5.0.4
@@ -20,7 +20,7 @@ require (
 require (
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
@@ -60,10 +60,10 @@ require (
 	go.uber.org/dig v1.19.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
-	golang.org/x/crypto v0.48.0 // indirect
-	golang.org/x/net v0.51.0 // indirect
+	golang.org/x/crypto v0.49.0 // indirect
+	golang.org/x/net v0.52.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/text v0.34.0 // indirect
+	golang.org/x/text v0.35.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
 )
