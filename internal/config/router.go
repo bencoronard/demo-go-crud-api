@@ -6,6 +6,7 @@ import (
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
 	"github.com/bencoronard/demo-go-common-libs/utility"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
+	echootel "github.com/labstack/echo-opentelemetry"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
 )
@@ -40,7 +41,10 @@ func (r *router) RegisterMiddlewares() {
 }
 
 func (r *router) RegisterRoutes() {
-	api := r.e.Group("/api/resources", middleware.RequestLogger())
+	api := r.e.Group("/api/resources",
+		echootel.NewMiddleware(r.p.Env.App.Name),
+		middleware.RequestLogger(),
+	)
 
 	api.GET("/:id", r.h.RetrieveResource)
 	api.GET("", r.h.ListResources)
