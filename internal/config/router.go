@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
-	"github.com/bencoronard/demo-go-common-libs/utility"
+	"github.com/bencoronard/demo-go-common-libs/validation"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	echootel "github.com/labstack/echo-opentelemetry"
 	"github.com/labstack/echo/v5"
@@ -17,7 +17,7 @@ type router struct {
 	h *resource.ResourceHandler
 }
 
-func NewRouter(p *Properties, h *resource.ResourceHandler, v utility.Validator) xhttp.Router {
+func NewRouter(p *Properties, h *resource.ResourceHandler, v validation.Validator) xhttp.Router {
 	e := echo.New()
 	e.HTTPErrorHandler = xhttp.GlobalErrorHandler(nil)
 	e.Validator = v
