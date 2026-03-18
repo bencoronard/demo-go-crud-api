@@ -20,6 +20,7 @@ func main() {
 			config.NewAuthHeaderResolver,
 			validation.NewValidator,
 			config.NewRouter,
+			config.NewAppErrorHandler,
 		),
 		fx.Provide(
 			resource.NewResourceRepo,
@@ -31,6 +32,9 @@ func main() {
 			otel.NewTracerProvider,
 			otel.NewMeterProvider,
 			otel.NewLoggerProvider,
+		),
+		fx.Provide(
+			http.NewGlobalErrorHandler,
 		),
 		fx.Invoke(
 			config.ConfigureLogger,

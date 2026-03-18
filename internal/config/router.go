@@ -17,9 +17,9 @@ type router struct {
 	h *resource.ResourceHandler
 }
 
-func NewRouter(p *Properties, h *resource.ResourceHandler, v validation.Validator) xhttp.Router {
+func NewRouter(p *Properties, h *resource.ResourceHandler, v validation.Validator, eh xhttp.GlobalErrorHandler) xhttp.Router {
 	e := echo.New()
-	e.HTTPErrorHandler = xhttp.GlobalErrorHandler(nil)
+	e.HTTPErrorHandler = eh.GetHandler()
 	e.Validator = v
 	return &router{
 		p: p,
