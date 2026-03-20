@@ -4,6 +4,6 @@ import (
 	"go.opentelemetry.io/otel/sdk/resource"
 )
 
-func NewResource(p *Properties) (*resource.Resource, error) {
+func NewResource() (*resource.Resource, error) {
 	return resource.Environment(), nil
 }

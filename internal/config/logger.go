@@ -7,7 +7,7 @@ import (
 	"go.opentelemetry.io/otel/sdk/log"
 )
 
-func ConfigureLogger(p *Properties, lp *log.LoggerProvider) {
+func ConfigureLogger(lp *log.LoggerProvider) {
 	handler := otelslog.NewHandler(
 		"",
 		otelslog.WithLoggerProvider(lp),
