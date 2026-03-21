@@ -8,6 +8,7 @@ require (
 	github.com/bencoronard/demo-go-common-libs v0.0.0-20260318145351-984c5f1f0c99
 	github.com/caarlos0/env/v11 v11.4.0
 	github.com/golang-jwt/jwt/v5 v5.3.1
+	github.com/labstack/echo-opentelemetry v0.0.2
 	github.com/labstack/echo/v5 v5.0.4
 	go.opentelemetry.io/contrib/bridges/otelslog v0.17.0
 	go.opentelemetry.io/otel/sdk v1.42.0
@@ -50,7 +51,6 @@ require (
 	github.com/jackc/puddle/v2 v2.2.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/labstack/echo-opentelemetry v0.0.2 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
