@@ -15,16 +15,17 @@ func NewAppErrorHandler() xhttp.AppErrorHandler {
 	return &appErrorHandler{}
 }
 
-func (a *appErrorHandler) Handle(err error, pd *dto.ProblemDetail) error {
+func (a *appErrorHandler) Handle(err error, pd dto.ProblemDetail) (dto.ProblemDetail, bool) {
 	switch {
 	case errors.Is(err, resource.ErrResourceNotFound):
-		pd.Status = http.StatusNotFound
-		pd.Detail = err.Error()
-		return nil
+		return pd.
+			WithStatus(http.StatusNotFound).
+			WithDetail(err.Error()), true
 	case errors.Is(err, resource.ErrOptimisticLockFailure):
-		pd.Status = http.StatusConflict
-		pd.Detail = err.Error()
-		return nil
+		return pd.
+			WithStatus(http.StatusConflict).
+			WithDetail(err.Error()), true
+	default:
+		return pd, false
 	}
-	return err
 }
