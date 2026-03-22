@@ -9,7 +9,16 @@ import (
 	echootel "github.com/labstack/echo-opentelemetry"
 	"github.com/labstack/echo/v5"
 	"github.com/labstack/echo/v5/middleware"
+	"go.uber.org/fx"
 )
+
+type RouterParams struct {
+	fx.In
+	p  *Properties
+	h  *resource.ResourceHandler
+	v  validation.Validator
+	eh xhttp.GlobalErrorHandler
+}
 
 type router struct {
 	p *Properties
@@ -17,14 +26,14 @@ type router struct {
 	h *resource.ResourceHandler
 }
 
-func NewRouter(p *Properties, h *resource.ResourceHandler, v validation.Validator, eh xhttp.GlobalErrorHandler) xhttp.Router {
+func NewRouter(rp RouterParams) xhttp.Router {
 	e := echo.New()
-	e.HTTPErrorHandler = eh.GetHandler()
-	e.Validator = v
+	e.HTTPErrorHandler = rp.eh.GetHandler()
+	e.Validator = rp.v
 	return &router{
-		p: p,
+		p: rp.p,
 		e: e,
-		h: h,
+		h: rp.h,
 	}
 }
 
