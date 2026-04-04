@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	xhttp "github.com/bencoronard/demo-go-common-libs/http"
-	"github.com/bencoronard/demo-go-common-libs/validation"
+	"github.com/bencoronard/demo-go-common-libs/validator"
 	"github.com/bencoronard/demo-go-crud-api/internal/resource"
 	echootel "github.com/labstack/echo-opentelemetry"
 	"github.com/labstack/echo/v5"
@@ -16,7 +16,7 @@ type RouterParams struct {
 	fx.In
 	p  *Properties
 	h  *resource.ResourceHandler
-	v  validation.Validator
+	v  validator.Validator
 	eh xhttp.GlobalErrorHandler
 }
 

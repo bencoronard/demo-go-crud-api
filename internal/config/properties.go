@@ -1,11 +1,6 @@
 package config
 
 import (
-	"context"
-	"fmt"
-	"time"
-
-	"github.com/bencoronard/demo-go-common-libs/vault"
 	"github.com/caarlos0/env/v11"
 	"go.uber.org/fx"
 )
@@ -31,18 +26,18 @@ func NewProperties(lc fx.Lifecycle) (*Properties, error) {
 		return nil, err
 	}
 
-	vc, err := vault.NewTokenClient(lc, e.Vault.URI, e.Vault.Token)
-	if err != nil {
-		return nil, err
-	}
+	// vc, err := vault.NewTokenClient()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
+	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	// defer cancel()
 
 	var s secretCfg
-	if err := vc.ReadSecret(ctx, fmt.Sprintf("secret/application/%s", e.App.Environment), &s); err != nil {
-		return nil, err
-	}
+	// if err := vc.ReadSecret(ctx, fmt.Sprintf("secret/application/%s", e.App.Environment), &s); err != nil {
+	// 	return nil, err
+	// }
 
 	return &Properties{
 		Env:    e,

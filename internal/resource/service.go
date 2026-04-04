@@ -8,7 +8,7 @@ import (
 
 	"github.com/bencoronard/demo-go-common-libs/auth"
 	"github.com/bencoronard/demo-go-common-libs/dto"
-	"github.com/bencoronard/demo-go-common-libs/orm"
+	"github.com/bencoronard/demo-go-common-libs/rdb"
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
@@ -22,11 +22,11 @@ type resourceService interface {
 }
 
 type resourceServiceImpl struct {
-	t orm.TransactionManager
+	t rdb.TransactionManager
 	r resourceRepo
 }
 
-func NewResourceService(t orm.TransactionManager, r resourceRepo) resourceService {
+func NewResourceService(t rdb.TransactionManager, r resourceRepo) resourceService {
 	return &resourceServiceImpl{
 		t: t,
 		r: r,
